@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Integration Room</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0a0e16;
+        --panel: #111827;
+        --panel-2: #172033;
+        --muted: #9aa7bc;
+        --text: #f4f7fb;
+        --cyan: #54d6ff;
+        --orange: #ffb86b;
+        --green: #70e0a0;
+        --red: #ff7c8b;
+        --line: rgba(255, 255, 255, 0.1);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font: 14px/1.5 ui-sans-serif, system-ui, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at 15% 0%, #18314a 0, transparent 34%), var(--bg);
+      }
+      .shell { max-width: 1440px; margin: 0 auto; padding: 28px; }
+      .eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: .18em; font-size: 11px; font-weight: 700; }
+      h1 { margin: 4px 0 0; font-size: clamp(26px, 4vw, 48px); letter-spacing: -.04em; }
+      .subtitle { color: var(--muted); max-width: 760px; margin: 8px 0 24px; font-size: 16px; }
+      .hero, .card { background: rgba(17, 24, 39, .88); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 18px 60px rgba(0, 0, 0, .24); }
+      .hero { padding: 22px; margin-bottom: 18px; }
+      .hero-grid, .company-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .metric { background: var(--panel-2); padding: 16px; border-radius: 14px; }
+      .metric span { color: var(--muted); display: block; font-size: 12px; }
+      .metric strong { display: block; font-size: 28px; margin-top: 4px; }
+      .bad { color: var(--red); }
+      .good { color: var(--green); }
+      .grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; }
+      .card { padding: 18px; }
+      .card h2 { margin: 0 0 14px; font-size: 15px; }
+      .company { padding: 16px; border-radius: 14px; background: var(--panel-2); }
+      .company h3 { margin: 0 0 8px; font-size: 16px; }
+      .company.orbit { border-top: 3px solid var(--orange); }
+      .company.cedar { border-top: 3px solid var(--cyan); }
+      .row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+      .row:last-child { border-bottom: 0; }
+      .row span { color: var(--muted); }
+      .timeline { display: grid; gap: 10px; max-height: 610px; overflow: auto; }
+      .message { padding: 12px 14px; background: var(--panel-2); border-left: 3px solid var(--cyan); border-radius: 10px; }
+      .message.private { border-left-color: var(--orange); opacity: .78; }
+      .message strong { font-size: 12px; }
+      .message p { margin: 4px 0 0; color: #d9e1ef; }
+      .tag { display: inline-block; margin-left: 6px; padding: 2px 6px; border-radius: 999px; background: rgba(84, 214, 255, .14); color: var(--cyan); font-size: 10px; }
+      .blocked { color: var(--red); background: rgba(255, 124, 139, .1); padding: 12px; border-radius: 10px; margin-bottom: 12px; }
+      .contract { color: var(--green); background: rgba(112, 224, 160, .1); padding: 12px; border-radius: 10px; }
+      code { color: #d7e5ff; }
+      @media (max-width: 900px) { .grid, .hero-grid, .company-grid { grid-template-columns: 1fr; } .shell { padding: 16px; } }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="eyebrow">Switch case room · case_ord_1042</div>
+      <h1>One backpack. Two fulfillment jobs.</h1>
+      <p class="subtitle">Orbit Payments and Cedar Outfitters investigate the same integration failure from their own private evidence, then verify the repair together.</p>
+
+      <section class="hero">
+        <div class="hero-grid">
+          <div class="metric"><span>Payment</span><strong>$129.00</strong><span>captured once</span></div>
+          <div class="metric"><span>Before repair</span><strong class="bad" id="before">2 jobs</strong><span>same event applied twice</span></div>
+          <div class="metric"><span>After repair</span><strong class="good" id="after">1 job</strong><span>10 concurrent deliveries</span></div>
+          <div class="metric"><span>Contract</span><strong class="good">v1 ready</strong><span>next customer preflight</span></div>
+        </div>
+      </section>
+
+      <div class="grid">
+        <section class="card">
+          <h2>What each side can see</h2>
+          <div class="company-grid">
+            <article class="company orbit">
+              <h3>Orbit Payments</h3>
+              <div class="row"><span>Event</span><code>evt_901</code></div>
+              <div class="row"><span>Attempt 1</span><strong class="bad">timeout</strong></div>
+              <div class="row"><span>Attempt 2</span><strong class="good">HTTP 200</strong></div>
+              <div class="row"><span>Agent finding</span><span>retry after lost response</span></div>
+            </article>
+            <article class="company cedar">
+              <h3>Cedar Outfitters</h3>
+              <div class="row"><span>Order</span><code>ORD-1042</code></div>
+              <div class="row"><span>Fulfillments</span><strong class="bad">2 rows</strong></div>
+              <div class="row"><span>First request</span><strong class="good">committed</strong></div>
+              <div class="row"><span>Agent finding</span><span>no event deduplication</span></div>
+            </article>
+          </div>
+          <div class="blocked" style="margin-top: 14px">Export guard blocked a customer email and secret canary before shared publication.</div>
+          <div class="contract">Human decision recorded. Retry identity is <code>event_id</code>. Distinct event types still apply.</div>
+          <div class="contract" id="preflight" style="margin-top: 12px">Next-customer preflight loading...</div>
+        </section>
+
+        <section class="card">
+          <h2>Shared case room</h2>
+          <div class="timeline" id="timeline"></div>
+        </section>
+      </div>
+    </main>
+    <script>
+      fetch('/demo.json').then(response => response.json()).then(data => {
+        document.querySelector('#before').textContent = `${data.incident.before_fulfillment_count} jobs`;
+        document.querySelector('#after').textContent = `${data.incident.after_fulfillment_count} job`;
+        document.querySelector('#preflight').innerHTML = data.preflight.vulnerable.passed
+          ? 'Next-customer preflight passed unexpectedly'
+          : 'Next-customer preflight caught the vulnerable receiver. Repaired fixture passed.';
+        const timeline = document.querySelector('#timeline');
+        for (const message of data.room.messages) {
+          const item = document.createElement('article');
+          item.className = `message ${message.visibility}`;
+          const tag = message.visibility === 'private' ? '<span class="tag">private evidence</span>' : '';
+          item.innerHTML = `<strong>${message.sender}${tag}</strong><p>${message.body}</p>`;
+          timeline.appendChild(item);
+        }
+      });
+    </script>
+  </body>
+</html>

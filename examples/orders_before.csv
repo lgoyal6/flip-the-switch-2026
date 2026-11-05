@@ -1,0 +1,5 @@
+order_id,amount,currency
+order-001,12.50,USD
+order-002,0.99,USD
+order-003,200.00,USD
+order-004,19.95,USD
