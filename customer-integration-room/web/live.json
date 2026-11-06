@@ -1,0 +1,261 @@
+{
+  "case_id": "case_ord_1042",
+  "evidence": {
+    "blocked_export_fields": [
+      "[2].customer_email",
+      "[2].api_key"
+    ],
+    "published_packets": [
+      "packet_orbit_001",
+      "packet_cedar_001"
+    ],
+    "redactions": [
+      "customer_email",
+      "api_key"
+    ]
+  },
+  "incident": {
+    "address_after_update": "42 River Road, Portland",
+    "after_fulfillment_count": 1,
+    "attempts": [
+      {
+        "attempt": 1,
+        "error": "timed out",
+        "event_id": "evt_901",
+        "status": "timeout"
+      },
+      {
+        "attempt": 2,
+        "event_id": "evt_901",
+        "http_status": 200,
+        "response": {
+          "event_id": "evt_901",
+          "outcome": "fulfillment_created"
+        },
+        "status": "ok"
+      }
+    ],
+    "before_fulfillment_count": 2,
+    "event_id": "evt_901",
+    "order_id": "ORD-1042"
+  },
+  "patch": {
+    "checks": [
+      "unique processed event IDs",
+      "transactional fulfillment write",
+      "distinct event types remain applicable"
+    ],
+    "description": "Atomically record event IDs before applying business effects.",
+    "files": [
+      "cedar_receiver/webhooks.py",
+      "cedar_receiver/schema.sql"
+    ],
+    "patch_id": "patch_001"
+  },
+  "preflight": {
+    "contract_id": "integration-v1",
+    "repaired": {
+      "contract_id": "integration-v1",
+      "failure": null,
+      "fixed_receiver": true,
+      "fixture": "cedar-next-customer",
+      "fulfillment_count": 1,
+      "passed": true,
+      "same_event_deliveries": 4
+    },
+    "vulnerable": {
+      "contract_id": "integration-v1",
+      "failure": "receiver applies one event more than once",
+      "fixed_receiver": false,
+      "fixture": "cedar-next-customer",
+      "fulfillment_count": 4,
+      "passed": false,
+      "same_event_deliveries": 4
+    }
+  },
+  "room": {
+    "messages": [
+      {
+        "body": "One payment produced two fulfillment jobs. Opening case ORD-1042.",
+        "evidence_ids": [],
+        "message_id": "room-msg-001",
+        "organization": null,
+        "sender": "cedar-engineer",
+        "visibility": "shared"
+      },
+      {
+        "body": "Investigating sender delivery history for evt_901.",
+        "evidence_ids": [],
+        "message_id": "room-msg-002",
+        "organization": "orbit-payments",
+        "sender": "orbit-worker",
+        "visibility": "private"
+      },
+      {
+        "body": "Investigating receiver logs and fulfillment state.",
+        "evidence_ids": [],
+        "message_id": "room-msg-003",
+        "organization": "cedar-outfitters",
+        "sender": "cedar-worker",
+        "visibility": "private"
+      },
+      {
+        "body": "evt_901 attempt 1 timed out. Retry attempt 2 returned HTTP 200.",
+        "evidence_ids": [
+          "orbit_delivery_01",
+          "orbit_delivery_02"
+        ],
+        "message_id": "room-msg-004",
+        "organization": null,
+        "sender": "orbit-worker",
+        "visibility": "shared"
+      },
+      {
+        "body": "The first request committed before the timeout. The retry created a second fulfillment.",
+        "evidence_ids": [
+          "cedar_db_01",
+          "cedar_log_01"
+        ],
+        "message_id": "room-msg-005",
+        "organization": null,
+        "sender": "cedar-worker",
+        "visibility": "shared"
+      },
+      {
+        "body": "Blocked Cedar packet because it contained a customer email and a secret canary.",
+        "evidence_ids": [],
+        "message_id": "room-msg-006",
+        "organization": "cedar-outfitters",
+        "sender": "export-guard",
+        "visibility": "private"
+      },
+      {
+        "body": "Approved evidence is now shared. Both sides show the same root cause.",
+        "evidence_ids": [
+          "packet_orbit_001",
+          "packet_cedar_001"
+        ],
+        "message_id": "room-msg-007",
+        "organization": null,
+        "sender": "integration-coordinator",
+        "visibility": "shared"
+      },
+      {
+        "body": "Decision approved. Retries share event_id. Distinct event types for one order still apply.",
+        "evidence_ids": [],
+        "message_id": "room-msg-008",
+        "organization": null,
+        "sender": "cedar-engineer",
+        "visibility": "shared"
+      },
+      {
+        "body": "Patch approved and applied. Starting concurrent replay verification.",
+        "evidence_ids": [],
+        "message_id": "room-msg-009",
+        "organization": null,
+        "sender": "cedar-worker",
+        "visibility": "shared"
+      },
+      {
+        "body": "Verified 10 deliveries of evt_901 produce 1 fulfillment. evt_902 updates the address.",
+        "evidence_ids": [],
+        "message_id": "room-msg-010",
+        "organization": null,
+        "sender": "verification-runner",
+        "visibility": "shared"
+      },
+      {
+        "body": "Accepted. Integration contract integration-v1 is ready for the next customer.",
+        "evidence_ids": [],
+        "message_id": "room-msg-011",
+        "organization": null,
+        "sender": "cedar-engineer",
+        "visibility": "shared"
+      }
+    ],
+    "room_id": "integration-ord-1042"
+  },
+  "source": "deterministic demo fallback",
+  "state": "contract_generated",
+  "timeline": [
+    {
+      "body": {
+        "organizations": [
+          "orbit-payments",
+          "cedar-outfitters"
+        ]
+      },
+      "state": "investigating"
+    },
+    {
+      "body": {
+        "packets": [
+          "packet_orbit_001",
+          "packet_cedar_001"
+        ]
+      },
+      "state": "evidence_shared"
+    },
+    {
+      "body": {
+        "distinct_events_apply": true,
+        "retry_identity": "event_id"
+      },
+      "state": "patch_proposed"
+    },
+    {
+      "body": {
+        "description": "Atomic event-id deduplication before business effects.",
+        "patch_id": "patch_001",
+        "patch_sha256": "patch-sha-demo"
+      },
+      "state": "patch_approved"
+    },
+    {
+      "body": {
+        "fulfillment_count": 1,
+        "same_event_deliveries": 10
+      },
+      "state": "verifying"
+    },
+    {
+      "body": {
+        "accepted_by": "@switch-mattermost-8a404cee-ad24-41f4-afc4-273cd9fd2f5f-user:localhost",
+        "address": "42 River Road, Portland"
+      },
+      "state": "customer_accepted"
+    },
+    {
+      "body": {
+        "contract_id": "integration-v1",
+        "rules": [
+          "deduplicate by event_id"
+        ]
+      },
+      "state": "contract_generated"
+    },
+    {
+      "body": {
+        "fulfillment_count": 1,
+        "same_event_deliveries": 10
+      },
+      "state": "verifying"
+    },
+    {
+      "body": {
+        "accepted_by": "@switch-mattermost-8a404cee-ad24-41f4-afc4-273cd9fd2f5f-user:localhost",
+        "address": "42 River Road, Portland"
+      },
+      "state": "customer_accepted"
+    },
+    {
+      "body": {
+        "contract_id": "integration-v1",
+        "rules": [
+          "deduplicate by event_id"
+        ]
+      },
+      "state": "contract_generated"
+    }
+  ]
+}

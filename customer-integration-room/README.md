@@ -46,6 +46,17 @@ messages through a live Switch room. `customer_integration_room.switch_bridge` p
 the Switch HTTP operations and WebSocket subscription for that connection. It expects
 agent credentials supplied at runtime and contains no saved deployment secrets.
 
+To export the current live Switch room and case journal into the console, run:
+
+```sh
+uv run python scripts/export_live_case.py \
+  --config ~/.codex/work/customer-integration-room/local/connection.json \
+  --state ~/.codex/work/customer-integration-room/local/live-case.sqlite3 \
+  --output web/live.json
+```
+
+The console loads `live.json` when present and falls back to the deterministic demo data.
+
 To publish the shared portion of a synthetic run into a configured room, provide the
 runtime connection values through environment variables:
 
